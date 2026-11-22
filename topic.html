@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>主題｜DELE A1 自學手帳</title>
+<style>
+:root{--bg-main:#F5F3EF;--bg-card:#FFFFFF;--border-color:#E6E2D8;--text-main:#2C302E;--text-muted:#78756E;--primary:#3B6E5C;--accent:#C86D51;--gender-m:#3B7A9E;--gender-m-bg:#EBF2F6;--gender-f:#B84A58;--gender-f-bg:#F9ECEE;--gender-n:#557A46;--gender-n-bg:#EEF3EC;--highlight-bg:#FBF0B2;--trap-bg:#FDF8E7;--trap-border:#D99B52;--r:12px;--sh:0 2px 8px rgba(60,55,40,.07)}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:16px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--primary)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,.card:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:16px 16px 96px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(245,243,239,.95);border-bottom:1px solid var(--border-color);backdrop-filter:blur(6px)}
+.bar .in{max-width:960px;margin:0 auto;padding:8px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bar .sp{flex:1}
+.btn{background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:5px 14px;text-decoration:none;color:var(--text-main);font-size:14px;white-space:nowrap}
+.btn.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.acc{border-color:var(--accent);color:var(--accent)}
+.btn.acc.on{background:var(--accent);color:#fff}
+h1{color:var(--primary);font-size:28px;margin:24px 0 4px;line-height:1.3}
+h2{color:var(--primary);font-size:20px;margin:36px 0 12px}
+.muted{color:var(--text-muted);font-size:14px}
+.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.spk{background:none;border:1px solid var(--accent);color:var(--accent);border-radius:50%;width:30px;height:30px;line-height:1;flex:none;padding:0}
+.spk:hover,.spk.playing{background:var(--accent);color:#fff}
+.m{color:var(--gender-m)}.f{color:var(--gender-f)}.n{color:var(--gender-n)}
+.zh{color:var(--text-muted)}
+body.mask .zh{filter:blur(7px);cursor:pointer;user-select:none;transition:filter .15s}
+body.mask .zh:hover,body.mask .zh.show{filter:none}
+mark{background:var(--highlight-bg);padding:0 3px;border-radius:4px;font-weight:700;color:inherit}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border-bottom:1px solid var(--border-color);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--primary);font-weight:600;white-space:nowrap}
+.scroll{overflow-x:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--bg-main);border-left:1px solid var(--border-color);box-shadow:-6px 0 20px rgba(0,0,0,.1);transform:translateX(100%);transition:transform .25s;z-index:40;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer header{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border-color)}
+.drawer header b{flex:1;color:var(--primary)}
+.drawer .tabs{padding:8px 12px;border-bottom:1px solid var(--border-color)}
+.drawer .body{overflow:auto;padding:12px 16px 40px;flex:1}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:4px 12px;font-size:14px}
+.tab.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.scrim{position:fixed;inset:0;background:rgba(44,48,46,.35);z-index:30;display:none}
+.scrim.on{display:block}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,92%);z-index:50;display:none}
+.modal.on{display:block}
+.vgrid{display:grid;grid-template-columns:auto 1fr;gap:2px 12px}
+.vgrid span:nth-child(odd){color:var(--text-muted)}
+@media(max-width:640px){
+.bar{position:fixed;top:auto;bottom:0;left:0;right:0;border-top:1px solid var(--border-color);border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0)}
+.bar .in{justify-content:space-around;padding:8px}
+.bar .sp{display:none}
+.btn{padding:8px 10px;font-size:13px}
+h1{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<mark>$1</mark>');
+const plain=s=>String(s).replace(/\*\*/g,'');
+const store={get(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let rate=parseFloat(store.get('rate','1')),masked=store.get('mask','0')==='1';
+const spkBtn=t=>`<button class="spk" type="button" data-say="${esc(plain(t))}" aria-label="朗讀：${esc(plain(t))}">🔊</button>`;
+function say(t,btn){
+ if(!('speechSynthesis' in window)){alert('此瀏覽器不支援語音朗讀');return}
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=rate;
+ const v=speechSynthesis.getVoices().find(v=>v.lang.replace('_','-').startsWith('es'));if(v)u.voice=v;
+ if(btn){btn.classList.add('playing');u.onend=u.onerror=()=>btn.classList.remove('playing')}
+ speechSynthesis.speak(u);
+}
+function applyUI(){
+ document.body.classList.toggle('mask',masked);
+ $('#btnMask').classList.toggle('on',masked);
+ $('#btnRate').textContent=rate<1?'🐢 慢速 0.75x':'🐇 正常 1.0x';
+ $('#btnRate').classList.toggle('on',rate<1);
+}
+function table(sec){
+ const sp=sec.speak||[0];
+ return `<div class="scroll"><table><thead><tr>${sec.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${sec.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${sp.includes(i)?`<span class="cell">${esc(c)}</span> ${spkBtn(c)}`:`<span class="${/[\u4e00-\u9fff]/.test(c)?'zh':''}">${esc(c)}</span>`}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+const PRON=['yo','tú','él / ella / usted','nosotros','vosotros','ellos / ellas / ustedes'];
+function verbTable(key,v){
+ return `<div class="vgrid">${v.f.map((f,i)=>`<span>${PRON[i]}</span><span><b>${esc(f)}</b> ${spkBtn(f)}</span>`).join('')}</div>`;
+}
+function buildDrawer(tb){
+ const secs=tb.sections.concat([{id:'verbs',title:'動詞變化'}]);
+ const d=document.createElement('aside');d.className='drawer';d.id='drawer';d.setAttribute('aria-label','萬用工具箱');
+ d.innerHTML=`<header><b>🧰 萬用工具箱</b><button class="btn" type="button" id="closeDrawer">關閉</button></header><div class="tabs" id="tbTabs">${secs.map((s,i)=>`<button class="tab${i?'':' on'}" type="button" data-s="${s.id}">${esc(s.title)}</button>`).join('')}</div><div class="body" id="tbBody"></div>`;
+ document.body.append(d);
+ const sc=document.createElement('div');sc.className='scrim';sc.id='scrim';document.body.append(sc);
+ const show=id=>{
+  $$('#tbTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.s===id));
+  $('#tbBody').innerHTML=id==='verbs'?Object.entries(tb.verbs).map(([k,v])=>`<div class="card" style="margin-bottom:10px"><b>${k}</b> ${spkBtn(k)} <span class="zh">${esc(v.zh)}</span>${verbTable(k,v)}</div>`).join(''):table(tb.sections.find(s=>s.id===id));
+ };
+ show(secs[0].id);
+ $('#tbTabs').onclick=e=>{const t=e.target.closest('.tab');if(t)show(t.dataset.s)};
+ const toggle=o=>{d.classList.toggle('open',o);sc.classList.toggle('on',o)};
+ $('#btnBox').onclick=()=>toggle(!d.classList.contains('open'));
+ $('#closeDrawer').onclick=sc.onclick=()=>toggle(false);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false)});
+ window.openToolboxTab=id=>{toggle(true);show(id)};
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('.spk');
+ if(b){e.stopPropagation();say(b.dataset.say,b);return}
+ const z=e.target.closest('.zh');
+ if(z&&masked)z.classList.toggle('show');
+},true);
+async function boot(){
+ $('#btnMask').onclick=()=>{masked=!masked;store.set('mask',masked?'1':'0');applyUI()};
+ $('#btnRate').onclick=()=>{rate=rate<1?1:0.75;store.set('rate',String(rate));applyUI()};
+ applyUI();
+ if('speechSynthesis' in window)speechSynthesis.getVoices();
+ try{const r=await fetch('data.json');if(!r.ok)throw 0;return await r.json()}
+ catch(e){document.querySelector('main').innerHTML='<div class="card"><b>讀取 data.json 失敗</b><p class="muted">請確認 data.json 與本頁在同一資料夾，並用 GitHub Pages 或本機伺服器（例如 python3 -m http.server）開啟，直接雙擊檔案開啟時瀏覽器會擋下讀取。</p></div>';throw e}
+}
+</script>
+</head>
+<body>
+<nav class="bar" aria-label="主要導覽"><div class="in">
+<a class="btn" href="index.html">🏠 首頁</a>
+<span class="sp"></span>
+<button class="btn acc" type="button" id="btnBox">🧰 工具箱</button>
+<button class="btn" type="button" id="btnMask" aria-label="遮罩測驗開關">🙈 遮罩測驗</button>
+<button class="btn" type="button" id="btnRate" aria-label="語速切換">🐇 正常 1.0x</button>
+</div></nav>
+<main class="wrap"><p class="muted">載入中…</p></main>
+<div class="scrim" id="vscrim"></div>
+<div class="modal card" id="vmodal" role="dialog" aria-modal="true"></div>
+<style>
+.tabs.v{margin-bottom:12px}
+.words{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));align-items:start}
+.w{cursor:pointer;padding:10px 14px}
+.w .top{display:flex;align-items:center;gap:8px}
+.w .es{flex:1;font-size:19px;font-weight:600}
+.w .more{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border-color);font-size:15px}
+.w.open .more{display:block}
+.w.m{background:var(--gender-m-bg);border-color:#cfe0ea}.w.f{background:var(--gender-f-bg);border-color:#ecd0d4}.w.n{background:var(--gender-n-bg);border-color:#d3e0cc}
+.w.m .es,.w.f .es,.w.n .es{color:inherit}
+.syl{font-family:ui-monospace,Menlo,monospace;color:var(--text-muted)}
+.sm{font-size:13px;padding:2px 10px;margin-top:6px}
+.two{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.g{margin-bottom:12px}
+.blocks{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin:8px 0}
+.blk{border-radius:8px;padding:6px 12px;border:1px solid;text-align:center;line-height:1.3}
+.blk small{display:block;font-size:12px;opacity:.8}
+.b-g{background:#E6EFEB;border-color:var(--primary);color:var(--primary)}
+.b-n{background:var(--gender-m-bg);border-color:var(--gender-m);color:var(--gender-m)}
+.b-a{background:var(--gender-n-bg);border-color:var(--gender-n);color:var(--gender-n)}
+.b-f{background:#F7E9E4;border-color:var(--accent);color:var(--accent)}
+.legend span{margin-right:12px;font-size:13px}
+.trap{background:var(--trap-bg);border:1px solid var(--trap-border);border-left-width:6px;border-radius:var(--r);padding:12px 16px}
+.trap ul{margin:6px 0 0;padding-left:20px}
+.essay{font-size:18px;line-height:2}
+.stub code{display:block;white-space:pre-wrap;background:var(--bg-main);padding:10px;border-radius:8px;font-size:13px}
+</style>
+<script>
+const KINDS=[['nouns','名詞'],['verbs','動詞'],['adjs','形容詞／副詞']];
+const id=new URLSearchParams(location.search).get('id');
+let D,verbs;
+function wordCard(w,kind){
+ const cls=kind==='nouns'?(w.g||'n'):'';
+ const art=kind==='nouns'&&w.art?`<span class="${cls}">${esc(w.art)}</span> `:'';
+ const say=(kind==='nouns'&&w.art&&!w.es.includes('/')?w.art.split('/')[0]+' ':'')+w.es.split('/')[0].trim();
+ return `<div class="card w ${cls}" tabindex="0" role="button" aria-expanded="false"><div class="top"><span class="es ${cls}">${art}${esc(w.es)}</span>${spkBtn(say)}</div>
+ <div class="more"><div class="zh">${esc(w.zh)}</div><div class="syl">${esc(w.syl||'')}</div>
+ <div style="margin-top:4px"><span>${esc(w.ex)}</span> ${spkBtn(w.ex)}</div><div class="zh">${esc(w.exzh)}</div>
+ ${kind==='verbs'&&w.key&&verbs[w.key]?`<button class="btn acc sm" type="button" data-v="${w.key}">查看變化表</button>`:''}</div></div>`;
+}
+function renderVocab(v){
+ const kinds=KINDS.filter(k=>v[k[0]]?.length);
+ return `<div class="tabs v" id="vt">${kinds.map((k,i)=>`<button class="tab${i?'':' on'}" type="button" data-k="${k[0]}">${k[1]}（${v[k[0]].length}）</button>`).join('')}</div>
+ <p class="muted legend"><span class="m">■ 陽性 m</span><span class="f">■ 陰性 f</span><span class="n">■ 陰陽同形</span>點卡片展開，🔊 發音</p>
+ ${kinds.map((k,i)=>`<div class="words" data-p="${k[0]}"${i?' hidden':''}>${v[k[0]].map(w=>wordCard(w,k[0])).join('')}</div>`).join('')}`;
+}
+function renderGrammar(gs){
+ return gs.map(g=>`<div class="card g"><b>${esc(g.title)}</b><p>${esc(g.intro||'')}</p>
+ ${(g.verbs||[]).map(k=>verbs[k]?`<div class="card" style="margin-bottom:10px"><b>${k}</b> ${spkBtn(k)} <span class="zh">${esc(verbs[k].zh)}</span>${verbTable(k,verbs[k])}</div>`:'').join('')}
+ ${g.rules?`<ul>${g.rules.map(r=>`<li>${esc(r)} ${spkBtn(r.split('：').pop())}</li>`).join('')}</ul>`:''}
+ ${g.compare?`<div class="two">${['l','r'].map((s,i)=>`<div class="card" style="border-top:4px solid ${i?'var(--accent)':'var(--primary)'}"><b>${esc(g.compare[s].t)}</b><ul style="padding-left:18px;margin:6px 0 0">${g.compare[s].pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div>`).join('')}</div>`:''}</div>`).join('');
+}
+function renderPatterns(ps){
+ return `<p class="muted legend"><span class="b-g" style="padding:0 6px;border-radius:4px">文法</span><span class="b-n" style="padding:0 6px;border-radius:4px">名詞</span><span class="b-a" style="padding:0 6px;border-radius:4px">形容詞</span><span class="b-f" style="padding:0 6px;border-radius:4px">功能詞</span></p>`+ps.map(p=>`<div class="card g"><b>${esc(p.title)}</b><div class="blocks">${p.blocks.map(b=>`<div class="blk b-${b.t}">${esc(b.es)}<small class="zh">${esc(b.zh)}</small></div>`).join('<span style="align-self:center">+</span>')}</div>
+ <div>${esc(p.ex)} ${spkBtn(p.ex)}</div><div class="zh">${esc(p.exzh)}</div></div>`).join('');
+}
+function renderOutput(o){
+ return `<div class="card g"><b>${esc(o.title)}</b><p class="essay">${md(o.text)} ${spkBtn(o.text)}</p><div class="zh">${esc(o.zh)}</div></div>
+ <div class="trap"><b>⚠️ 考場避坑提示</b><ul>${o.traps.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`;
+}
+boot().then(data=>{
+ D=data;verbs=D.toolbox.verbs;buildDrawer(D.toolbox);
+ const t=D.topics.find(x=>x.id===id);
+ const m=$('main');
+ if(!t){m.innerHTML=`<div class="card"><b>找不到主題</b><p class="muted">網址需要類似 topic.html?id=topic_03。<a href="index.html">返回首頁</a></p></div>`;return}
+ document.title=t.title+'｜'+D.meta.title;
+ let h=`<h1>${t.icon||''} ${esc(t.title)}</h1><p class="muted">${esc(t.summary)}</p>`;
+ if(!t.vocab&&!t.grammar&&!t.patterns&&!t.output){
+  h+=`<div class="card stub"><b>🚧 此主題內容建置中</b><p class="muted">在 data.json 的這個主題（id: ${esc(t.id)}）加入下列欄位，頁面就會自動生成：</p><code>"vocab": { "nouns": [], "verbs": [], "adjs": [] },\n"grammar": [],\n"patterns": [],\n"output": { "title": "", "text": "含 **重點字**", "zh": "", "traps": [] }</code><p class="muted">格式可參考 topic_01 或 topic_03。</p></div>`;
+ }else{
+  if(t.vocab)h+=`<h2>1. 核心單字庫</h2>`+renderVocab(t.vocab);
+  if(t.grammar)h+=`<h2>2. 本課關鍵文法</h2>`+renderGrammar(t.grammar);
+  if(t.patterns)h+=`<h2>3. 實戰句型公式</h2>`+renderPatterns(t.patterns);
+  if(t.output)h+=`<h2>4. DELE 實戰輸出</h2>`+renderOutput(t.output);
+ }
+ const i=D.topics.indexOf(t),p=D.topics[i-1],n=D.topics[i+1];
+ h+=`<div style="display:flex;justify-content:space-between;gap:8px;margin-top:32px">${p?`<a class="btn" href="topic.html?id=${p.id}">← ${esc(p.title)}</a>`:'<span></span>'}${n?`<a class="btn" href="topic.html?id=${n.id}">${esc(n.title)} →</a>`:''}</div>`;
+ m.innerHTML=h;applyUI();
+ m.addEventListener('click',e=>{
+  const vb=e.target.closest('[data-v]');
+  if(vb){e.stopPropagation();const k=vb.dataset.v;$('#vmodal').innerHTML=`<div style="display:flex;align-items:center"><b style="flex:1;font-size:18px">${k} <span class="zh">${esc(verbs[k].zh)}</span></b><button class="btn" type="button" id="vclose">關閉</button></div>${verbTable(k,verbs[k])}`;$('#vmodal').classList.add('on');$('#vscrim').classList.add('on');return}
+  const tab=e.target.closest('#vt .tab');
+  if(tab){$$('#vt .tab').forEach(x=>x.classList.toggle('on',x===tab));$$('[data-p]').forEach(x=>x.hidden=x.dataset.p!==tab.dataset.k);return}
+  const w=e.target.closest('.w');
+  if(w&&!e.target.closest('.zh')){const o=w.classList.toggle('open');w.setAttribute('aria-expanded',o)}
+ });
+ m.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('w')){e.preventDefault();e.target.click()}});
+ const close=()=>{$('#vmodal').classList.remove('on');$('#vscrim').classList.remove('on')};
+ $('#vscrim').onclick=close;document.addEventListener('click',e=>{if(e.target.id==='vclose')close()});
+});
+</script>
+</body>
+</html>

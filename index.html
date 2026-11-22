@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DELE A1 自學手帳</title>
+<style>
+:root{--bg-main:#F5F3EF;--bg-card:#FFFFFF;--border-color:#E6E2D8;--text-main:#2C302E;--text-muted:#78756E;--primary:#3B6E5C;--accent:#C86D51;--gender-m:#3B7A9E;--gender-m-bg:#EBF2F6;--gender-f:#B84A58;--gender-f-bg:#F9ECEE;--gender-n:#557A46;--gender-n-bg:#EEF3EC;--highlight-bg:#FBF0B2;--trap-bg:#FDF8E7;--trap-border:#D99B52;--r:12px;--sh:0 2px 8px rgba(60,55,40,.07)}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:16px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--primary)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,.card:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:16px 16px 96px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(245,243,239,.95);border-bottom:1px solid var(--border-color);backdrop-filter:blur(6px)}
+.bar .in{max-width:960px;margin:0 auto;padding:8px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bar .sp{flex:1}
+.btn{background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:5px 14px;text-decoration:none;color:var(--text-main);font-size:14px;white-space:nowrap}
+.btn.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.acc{border-color:var(--accent);color:var(--accent)}
+.btn.acc.on{background:var(--accent);color:#fff}
+h1{color:var(--primary);font-size:28px;margin:24px 0 4px;line-height:1.3}
+h2{color:var(--primary);font-size:20px;margin:36px 0 12px}
+.muted{color:var(--text-muted);font-size:14px}
+.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.spk{background:none;border:1px solid var(--accent);color:var(--accent);border-radius:50%;width:30px;height:30px;line-height:1;flex:none;padding:0}
+.spk:hover,.spk.playing{background:var(--accent);color:#fff}
+.m{color:var(--gender-m)}.f{color:var(--gender-f)}.n{color:var(--gender-n)}
+.zh{color:var(--text-muted)}
+body.mask .zh{filter:blur(7px);cursor:pointer;user-select:none;transition:filter .15s}
+body.mask .zh:hover,body.mask .zh.show{filter:none}
+mark{background:var(--highlight-bg);padding:0 3px;border-radius:4px;font-weight:700;color:inherit}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border-bottom:1px solid var(--border-color);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--primary);font-weight:600;white-space:nowrap}
+.scroll{overflow-x:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--bg-main);border-left:1px solid var(--border-color);box-shadow:-6px 0 20px rgba(0,0,0,.1);transform:translateX(100%);transition:transform .25s;z-index:40;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer header{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border-color)}
+.drawer header b{flex:1;color:var(--primary)}
+.drawer .tabs{padding:8px 12px;border-bottom:1px solid var(--border-color)}
+.drawer .body{overflow:auto;padding:12px 16px 40px;flex:1}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:4px 12px;font-size:14px}
+.tab.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.scrim{position:fixed;inset:0;background:rgba(44,48,46,.35);z-index:30;display:none}
+.scrim.on{display:block}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,92%);z-index:50;display:none}
+.modal.on{display:block}
+.vgrid{display:grid;grid-template-columns:auto 1fr;gap:2px 12px}
+.vgrid span:nth-child(odd){color:var(--text-muted)}
+@media(max-width:640px){
+.bar{position:fixed;top:auto;bottom:0;left:0;right:0;border-top:1px solid var(--border-color);border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0)}
+.bar .in{justify-content:space-around;padding:8px}
+.bar .sp{display:none}
+.btn{padding:8px 10px;font-size:13px}
+h1{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<mark>$1</mark>');
+const plain=s=>String(s).replace(/\*\*/g,'');
+const store={get(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let rate=parseFloat(store.get('rate','1')),masked=store.get('mask','0')==='1';
+const spkBtn=t=>`<button class="spk" type="button" data-say="${esc(plain(t))}" aria-label="朗讀：${esc(plain(t))}">🔊</button>`;
+function say(t,btn){
+ if(!('speechSynthesis' in window)){alert('此瀏覽器不支援語音朗讀');return}
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=rate;
+ const v=speechSynthesis.getVoices().find(v=>v.lang.replace('_','-').startsWith('es'));if(v)u.voice=v;
+ if(btn){btn.classList.add('playing');u.onend=u.onerror=()=>btn.classList.remove('playing')}
+ speechSynthesis.speak(u);
+}
+function applyUI(){
+ document.body.classList.toggle('mask',masked);
+ $('#btnMask').classList.toggle('on',masked);
+ $('#btnRate').textContent=rate<1?'🐢 慢速 0.75x':'🐇 正常 1.0x';
+ $('#btnRate').classList.toggle('on',rate<1);
+}
+function table(sec){
+ const sp=sec.speak||[0];
+ return `<div class="scroll"><table><thead><tr>${sec.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${sec.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${sp.includes(i)?`<span class="cell">${esc(c)}</span> ${spkBtn(c)}`:`<span class="${/[\u4e00-\u9fff]/.test(c)?'zh':''}">${esc(c)}</span>`}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+const PRON=['yo','tú','él / ella / usted','nosotros','vosotros','ellos / ellas / ustedes'];
+function verbTable(key,v){
+ return `<div class="vgrid">${v.f.map((f,i)=>`<span>${PRON[i]}</span><span><b>${esc(f)}</b> ${spkBtn(f)}</span>`).join('')}</div>`;
+}
+function buildDrawer(tb){
+ const secs=tb.sections.concat([{id:'verbs',title:'動詞變化'}]);
+ const d=document.createElement('aside');d.className='drawer';d.id='drawer';d.setAttribute('aria-label','萬用工具箱');
+ d.innerHTML=`<header><b>🧰 萬用工具箱</b><button class="btn" type="button" id="closeDrawer">關閉</button></header><div class="tabs" id="tbTabs">${secs.map((s,i)=>`<button class="tab${i?'':' on'}" type="button" data-s="${s.id}">${esc(s.title)}</button>`).join('')}</div><div class="body" id="tbBody"></div>`;
+ document.body.append(d);
+ const sc=document.createElement('div');sc.className='scrim';sc.id='scrim';document.body.append(sc);
+ const show=id=>{
+  $$('#tbTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.s===id));
+  $('#tbBody').innerHTML=id==='verbs'?Object.entries(tb.verbs).map(([k,v])=>`<div class="card" style="margin-bottom:10px"><b>${k}</b> ${spkBtn(k)} <span class="zh">${esc(v.zh)}</span>${verbTable(k,v)}</div>`).join(''):table(tb.sections.find(s=>s.id===id));
+ };
+ show(secs[0].id);
+ $('#tbTabs').onclick=e=>{const t=e.target.closest('.tab');if(t)show(t.dataset.s)};
+ const toggle=o=>{d.classList.toggle('open',o);sc.classList.toggle('on',o)};
+ $('#btnBox').onclick=()=>toggle(!d.classList.contains('open'));
+ $('#closeDrawer').onclick=sc.onclick=()=>toggle(false);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false)});
+ window.openToolboxTab=id=>{toggle(true);show(id)};
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('.spk');
+ if(b){e.stopPropagation();say(b.dataset.say,b);return}
+ const z=e.target.closest('.zh');
+ if(z&&masked)z.classList.toggle('show');
+},true);
+async function boot(){
+ $('#btnMask').onclick=()=>{masked=!masked;store.set('mask',masked?'1':'0');applyUI()};
+ $('#btnRate').onclick=()=>{rate=rate<1?1:0.75;store.set('rate',String(rate));applyUI()};
+ applyUI();
+ if('speechSynthesis' in window)speechSynthesis.getVoices();
+ try{const r=await fetch('data.json');if(!r.ok)throw 0;return await r.json()}
+ catch(e){document.querySelector('main').innerHTML='<div class="card"><b>讀取 data.json 失敗</b><p class="muted">請確認 data.json 與本頁在同一資料夾，並用 GitHub Pages 或本機伺服器（例如 python3 -m http.server）開啟，直接雙擊檔案開啟時瀏覽器會擋下讀取。</p></div>';throw e}
+}
+</script>
+</head>
+<body>
+<nav class="bar" aria-label="主要導覽"><div class="in">
+<a class="btn" href="index.html">🏠 首頁</a>
+<span class="sp"></span>
+<button class="btn acc" type="button" id="btnBox">🧰 工具箱</button>
+<button class="btn" type="button" id="btnMask" aria-label="遮罩測驗開關">🙈 遮罩測驗</button>
+<button class="btn" type="button" id="btnRate" aria-label="語速切換">🐇 正常 1.0x</button>
+</div></nav>
+<main class="wrap"><p class="muted">載入中…</p></main>
+<script>
+boot().then(D=>{
+ document.title=D.meta.title;
+ $('main').innerHTML=`<h1>${esc(D.meta.title)}</h1><p class="muted">${esc(D.meta.subtitle)}</p>
+ <h2>DELE A1 考試結構速查</h2>
+ <div class="grid">${D.meta.exam.map(x=>`<div class="card"><b>${esc(x.name)}</b><div class="muted">${esc(x.info)}</div></div>`).join('')}</div>
+ <div class="card" style="margin-top:14px;background:var(--trap-bg);border-color:var(--trap-border)"><b>及格標準</b><div>${esc(D.meta.pass)}</div></div>
+ <h2>8 大生活情境</h2>
+ <div class="grid">${D.topics.map(t=>`<a class="card" href="topic.html?id=${encodeURIComponent(t.id)}" style="text-decoration:none;color:inherit;display:block"><div style="font-size:28px">${t.icon||''}</div><b style="color:var(--primary)">${esc(t.title)}</b><div class="muted">${esc(t.summary)}</div>${t.vocab?'':'<div class="muted" style="margin-top:6px">🚧 內容建置中</div>'}</a>`).join('')}</div>
+ <p class="muted" style="margin-top:24px">常用的冠詞、疑問詞、介系詞、數字與動詞變化，隨時可從下方或上方的「工具箱」開啟。</p>`;
+ buildDrawer(D.toolbox);
+});
+</script>
+</body>
+</html>
